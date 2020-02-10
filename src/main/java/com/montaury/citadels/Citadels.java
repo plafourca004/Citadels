@@ -29,15 +29,15 @@ public class Citadels {
         System.out.println("Quel est votre age ? ");
         int playerAge = scanner.nextInt();
         Board board = new Board();
-        Player p = new Player(playerName, playerAge, new City(board), new HumanController());
-        p.human = true;
-        List<Player> players = List.of(p);
+        Player humanPlayer = new Player(playerName, playerAge, new City(board), new HumanController());
+        humanPlayer.human = true;
+        List<Player> players = List.of(humanPlayer);
         System.out.println("Saisir le nombre de joueurs total (entre 2 et 8): ");
-        int nbP;
+        int numberOfPlayers;
         do {
-            nbP = scanner.nextInt();
-        } while (nbP < 2 || nbP > 8);
-        for (int joueurs = 0; joueurs < nbP; joueurs += 1) {
+            numberOfPlayers = scanner.nextInt();
+        } while (numberOfPlayers < 2 || numberOfPlayers > 8);
+        for (int joueurs = 0; joueurs < numberOfPlayers; joueurs += 1) {
             Player player = new Player("Computer " + joueurs, 35, new City(board), new ComputerController());
             player.computer = true;
             players = players.append(player);
@@ -91,7 +91,7 @@ public class Citadels {
             for (int iii = 0; iii < 8; iii++) {
                 for (int ii = 0; ii < associations.size(); ii++) {
                     if (iii + 1 == associations.get(ii).character.number()) {
-                        if (associations.get(ii).isMurdered()) {}else{
+                        if (! associations.get(ii).isMurdered()) {
                             Group group = associations.get(ii);
                             associations.get(ii).thief().peek(thief -> thief.steal(group.player()));
                             Set<String> baseActions = HashSet.of("Draw 2 cards and keep 1", "Receive 2 coins");
@@ -105,13 +105,11 @@ public class Citadels {
                             // keep only actions that player can realize
                             List<String> possibleActions = List.empty();
                             for (String action : availableActions) {
-                                if (action == "Draw 2 cards and keep 1") {
-                                    if (pioche.canDraw(2))
+                                if ((action == "Draw 2 cards and keep 1") && (pioche.canDraw(2))) { //flagModif
                                     possibleActions = possibleActions.append("Draw 2 cards and keep 1");
                                 }
-                                else if (action == "Draw 3 cards and keep 1") {
-                                    if (pioche.canDraw(3))
-                                        possibleActions = possibleActions.append("Draw 2 cards and keep 1");
+                                else if (action == "Draw 3 cards and keep 1" && pioche.canDraw(3)) { //flagModif
+                                    possibleActions = possibleActions.append("Draw 2 cards and keep 1");
                                 }
                                 else {
                                     possibleActions = possibleActions.append(action);
@@ -142,35 +140,9 @@ public class Citadels {
                             }
                             actionExecuted(group, actionType, associations);
 
-                            // receive powers from the character
-                            List<String> powers = null;
-                            if (group.character == Character.ASSASSIN) {
-                                powers = List.of("Kill");
-                            }
-                            else if (group.character == Character.THIEF) {
-                                powers = List.of("Rob");
-                            }
-                            else if (group.character == Character.MAGICIAN) {
-                                powers = List.of("Exchange cards with other player", "Exchange cards with pile");
-                            }
-                            else if (group.character == Character.KING) {
-                                powers = List.of("Receive income");
-                            }
-                            else if (group.character == Character.BISHOP) {
-                                powers = List.of("Receive income");
-                            }
-                            else if (group.character == Character.MERCHANT) {
-                                powers = List.of("Receive income", "Receive 1 gold");
-                            }
-                            else if (group.character == Character.ARCHITECT) {
-                                powers = List.of("Pick 2 cards", "Build district", "Build district");
-                            }
-                            else if (group.character == Character.WARLORD) {
-                                powers = List.of("Receive income", "Destroy district");
-                            }
-                            else {
-                                System.out.println("Uh oh");
-                            }
+                            // receive powers from the character            flagModif
+                            List<String> powers = (List<String>) group.character().getPowers();
+
                             List<String>  extraActions = List.empty();
                             for (District d : group.player().city().districts()) {
                                 if (d == District.SMITHY) {
@@ -221,8 +193,7 @@ public class Citadels {
                                 }
                                 String actionType1 = group.player().controller.selectActionAmong(possibleActions2.toList());
                                 // execute selected action
-                                if (actionType1 == "End round")
-                                    {} else if (actionType1 == "Build district") {
+                                if (actionType1 == "Build district") {
                                     Card card = group.player().controller.selectAmong(group.player().buildableDistrictsInHand());
                                     group.player().buildDistrict(card);
                                     }
