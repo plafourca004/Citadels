@@ -11,7 +11,7 @@ import static com.montaury.citadels.district.District.GREAT_WALL;
 import static com.montaury.citadels.district.District.HAUNTED_CITY;
 
 public class City {
-    private static final int END_GAME_DISTRICT_NUMBER = 8;
+    private static final int END_GAME_DISTRICT_NUMBER = 7;
     private final Board board;
     private List<Card> districtCards = List.empty();
 
@@ -38,7 +38,7 @@ public class City {
 
         score = score + districtsScoreBonus(possession);
         if (winsAllColorBonus()) {
-            score += 5;
+            score += 3;
         }
         if (board.isFirst(this)) {
             score += (2);
@@ -46,6 +46,7 @@ public class City {
         if (isComplete()) {
             score += (2);
         }
+
         return score;
     }
 
