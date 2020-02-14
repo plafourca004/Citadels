@@ -1,129 +1,122 @@
 package com.montaury.citadels;
 
 import com.montaury.citadels.district.Card;
-import com.montaury.citadels.player.ComputerController;
-import com.montaury.citadels.player.HumanController;
-import com.montaury.citadels.player.Player;
-import org.assertj.core.internal.bytebuddy.build.ToStringPlugin;
+import io.vavr.collection.HashSet;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import io.vavr.collection.Set;
 
 import static com.montaury.citadels.district.Card.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CityTest {
+    public Board board;
+    public City city;
+
+    @BeforeEach
+    public void setUp(){
+        board = new Board();
+        city = new City(board);
+    }
+
     @Test
     public void it_should_return_3_for_cost_of_manor_card(){
-        Board board = new Board();
-        Player player = new Player("aName", 12, new City(board), new HumanController());
+        Possession possession = new Possession(0, null);
 
-        player.add(3);
+        city.buildDistrict(MANOR_1);
 
-        player.buildDistrict(MANOR_1);
-
-        assertThat(player.score()).isEqualTo(3);
+        assertThat(city.score(possession)).isEqualTo(3);
     }
 
     @Test
     public void it_should_return_11_for_all_district_type(){
-        Board board = new Board();
-        Player player = new Player("aName", 12, new City(board), new HumanController());
+        Possession possession = new Possession(0, null);
 
-        player.add(30);
+        city.buildDistrict(MANOR_1); //score += 3
+        city.buildDistrict(WATCHTOWER_1); //score +=1
+        city.buildDistrict(TAVERN_1); //score += 1
+        city.buildDistrict(TEMPLE_1); //score +=1
+        city.buildDistrict(HAUNTED_CITY); //score +=2
 
-        player.buildDistrict(MANOR_1); //score += 3
-        player.buildDistrict(WATCHTOWER_1); //score +=1
-        player.buildDistrict(TAVERN_1); //score += 1
-        player.buildDistrict(TEMPLE_1); //score +=1
-        player.buildDistrict(HAUNTED_CITY); //score +=2
-
-        assertThat(player.score()).isEqualTo(11);
+        assertThat(city.score(possession)).isEqualTo(11);
     }
 
     @Test
     public void it_should_return_4_for_the_first_player(){
-        Board board = new Board();
-        Player player = new Player("aName", 12, new City(board), new HumanController());
+        Possession possession = new Possession(0, null);
 
-        board.mark(player.city());
+        board.mark(city);
 
-        assertThat(player.score()).isEqualTo(4);
+        assertThat(city.score(possession)).isEqualTo(4);
     }
 
     @Test
     public void it_should_return_8_for_dragon_gate(){
-        Board board = new Board();
-        Player player = new Player("aName", 12, new City(board), new HumanController());
+        Possession possession = new Possession(0, null);
 
-        player.add(6);
+        city.buildDistrict(DRAGON_GATE);
 
-        player.buildDistrict(DRAGON_GATE);
-
-        assertThat(player.score()).isEqualTo(8);
+        assertThat(city.score(possession)).isEqualTo(8);
     }
 
     @Test
     public void it_should_return_8_for_university(){
-        Board board = new Board();
-        Player player = new Player("aName", 12, new City(board), new HumanController());
+        Possession possession = new Possession(0, null);
 
-        player.add(6);
+        city.buildDistrict(UNIVERSITY);
 
-        player.buildDistrict(UNIVERSITY);
-
-        assertThat(player.score()).isEqualTo(8);
+        assertThat(city.score(possession)).isEqualTo(8);
     }
 
     @Test
-    public void it_should_return_7_for_treasury(){
-        Board board = new Board();
-        Player player = new Player("aName", 12, new City(board), new HumanController());
+    public void it_should_return_6_for_treasury_and_1_gold(){
+        Possession possession = new Possession(1, null);
 
-        player.add(7);
+        city.buildDistrict(TREASURY);
 
-        player.buildDistrict(TREASURY);
-
-        assertThat(player.score()).isEqualTo(7);
+        assertThat(city.score(possession)).isEqualTo(6);
     }
 
     @Test
-    public void it_should_return_7_for_map_room(){
-        Board board = new Board();
-        Player player = new Player("aName", 12, new City(board), new HumanController());
+    public void it_should_return_6_for_map_room_and_1_card(){
+        Set<Card> jeuEnMain = HashSet.empty();
+        jeuEnMain = jeuEnMain.add(MANOR_1);
 
-        player.add(6);
+        Possession possession = new Possession(0,jeuEnMain);
 
-        player.addCardInHand(MAP_ROOM);
-        player.addCardInHand(TEMPLE_1);
-        player.addCardInHand(TEMPLE_2);
+        city.buildDistrict(MAP_ROOM); //score += 5
 
-        player.buildDistrict(MAP_ROOM); //score += 5
-
-        assertThat(player.score()).isEqualTo(7);
+        assertThat(city.score(possession)).isEqualTo(6);
     }
 
     @Test
-    public void it_should_return_10_for_complete_city_and_8_district(){
-        Board board = new Board();
-        Player player = new Player("aName", 12, new City(board), new HumanController());
+    public void it_should_return_9_for_complete_city_and_7_district(){
+        Possession possession = new Possession(0, null);
 
-        Board boardWinner = new Board();
-        Player playerWinner = new Player("aWinnerName", 12, new City(boardWinner), new HumanController());
+        board.mark(new City(new Board()));
 
-        board.mark(playerWinner.city());
+        city.buildDistrict(TEMPLE_1);
+        city.buildDistrict(TEMPLE_2);
+        city.buildDistrict(TEMPLE_3);
+        city.buildDistrict(TAVERN_1);
+        city.buildDistrict(TAVERN_2);
+        city.buildDistrict(TAVERN_3);
+        city.buildDistrict(TAVERN_4);
 
-        player.add(50);
+        assertThat(city.score(possession)).isEqualTo(9);
+    }
 
-        player.buildDistrict(TEMPLE_1);
-        player.buildDistrict(TEMPLE_2);
-        player.buildDistrict(TEMPLE_3);
-        player.buildDistrict(TAVERN_1);
-        player.buildDistrict(TAVERN_2);
-        player.buildDistrict(TAVERN_3);
-        player.buildDistrict(TAVERN_4);
-        player.buildDistrict(TAVERN_5);
+    @Test
+    public void it_sould_return_11_for_haunted_city_and_4_other_districts(){
+        Possession possession = new Possession(0, null);
 
-        assertThat(player.score()).isEqualTo(10);
+        city.buildDistrict(TEMPLE_1);//score += 1
+        city.buildDistrict(TAVERN_3);//score += 1
+        city.buildDistrict(WATCHTOWER_1);//score += 1
+        city.buildDistrict(KEEP_1);//score += 3
+        city.buildDistrict(HAUNTED_CITY);//score += 2
+
+        assertThat(city.score(possession)).isEqualTo(11);
     }
 }
