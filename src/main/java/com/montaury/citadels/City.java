@@ -41,7 +41,7 @@ public class City {
             score += 3;
         }
         if (board.isFirst(this)) {
-            score += (2);
+            score += (4);
         }
         if (isComplete()) {
             score += (2);
