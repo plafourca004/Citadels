@@ -1,5 +1,6 @@
 package com.montaury.citadels.round;
 
+import com.montaury.citadels.Action;
 import com.montaury.citadels.character.Character;
 import com.montaury.citadels.player.Player;
 import io.vavr.collection.HashSet;
@@ -45,5 +46,5 @@ public class Group {
     public final Character character;
     private boolean murdered;
     private Option<Player> stolenBy = Option.none();
-    public static final Set<String> OPTIONAL_ACTIONS = HashSet.of("Build district", "End round");
+    public static final Set<Action> OPTIONAL_ACTIONS = HashSet.of(Action.BUILD_DISTRICT, Action.END_ROUND);
 }
