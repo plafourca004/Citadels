@@ -26,7 +26,7 @@ class CityTest {
 
         city.buildDistrict(MANOR_1);
 
-        assertThat(city.score(possession)).isEqualTo(3);
+        assertThat(city.score(possession)).isEqualTo(2);
     }
 
     @Test
