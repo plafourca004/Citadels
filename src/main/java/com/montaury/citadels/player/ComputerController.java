@@ -1,5 +1,6 @@
 package com.montaury.citadels.player;
 
+import com.montaury.citadels.actions.ActionType;
 import com.montaury.citadels.character.Character;
 import com.montaury.citadels.district.Card;
 import com.montaury.citadels.district.DestructibleDistrict;
@@ -9,7 +10,6 @@ import io.vavr.collection.Map;
 import io.vavr.collection.Set;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class ComputerController implements PlayerController {
     private int random(int maxExcluded) {
@@ -22,7 +22,7 @@ public class ComputerController implements PlayerController {
     }
 
     @Override
-    public String selectActionAmong(List<String> actions) {
+    public ActionType selectActionAmong(List<ActionType> actions) {
         return randomAmong(actions);
     }
 

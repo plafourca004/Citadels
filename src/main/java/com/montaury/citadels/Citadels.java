@@ -1,9 +1,9 @@
 package com.montaury.citadels;
 
+import com.montaury.citadels.actions.ActionType;
 import com.montaury.citadels.character.Character;
 import com.montaury.citadels.character.RandomCharacterSelector;
 import com.montaury.citadels.district.Card;
-import com.montaury.citadels.district.DestructibleDistrict;
 import com.montaury.citadels.district.District;
 import com.montaury.citadels.district.DistrictType;
 import com.montaury.citadels.player.ComputerController;
@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class Citadels {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Hello! Quel est votre nom ? ");
@@ -108,26 +109,26 @@ public class Citadels {
                             couplesJoueurPerso.get(indiceJoueurCourant).thief().peek(thief -> thief.steal(joueurCourant.player())); //Se faire voler sa thune si c'est toi qui a été volé
 
                             List<District> districts = joueurCourant.player().city().districts();
-                            Set<Action> actionsDisponibles = HashSet.of(Action.DRAW_2_CARDS_KEEP_1, Action.RECEIVE_2_COINS);
+                            Set<ActionType> actionsDisponibles = HashSet.of(ActionType.DRAW_2_CARDS_KEEP_1, ActionType.RECEIVE_2_COINS);
                             for (District districtCourant : districts) {
                                 if (districtCourant == District.OBSERVATORY) {
-                                    actionsDisponibles = actionsDisponibles.replace(Action.DRAW_2_CARDS_KEEP_1, Action.DRAW_3_CARDS_KEEP_1);
+                                    actionsDisponibles = actionsDisponibles.replace(ActionType.DRAW_2_CARDS_KEEP_1, ActionType.DRAW_3_CARDS_KEEP_1);
                                 }
                             }
                             // keep only actions that player can realize
-                            List<Action> actionsPossibles = List.empty();
-                            for (Action action : actionsDisponibles) {
-                                if ((action == Action.DRAW_2_CARDS_KEEP_1) && (pioche.canDraw(2))) { //flagModif
-                                    actionsPossibles = actionsPossibles.append(Action.DRAW_2_CARDS_KEEP_1);
-                                } else if (action == Action.DRAW_3_CARDS_KEEP_1 && pioche.canDraw(3)) { //flagModif
-                                    actionsPossibles = actionsPossibles.append(Action.DRAW_3_CARDS_KEEP_1);
+                            List<ActionType> actionsPossibles = List.empty();
+                            for (ActionType action : actionsDisponibles) {
+                                if ((action == ActionType.DRAW_2_CARDS_KEEP_1) && (pioche.canDraw(2))) { //flagModif
+                                    actionsPossibles = actionsPossibles.append(ActionType.DRAW_2_CARDS_KEEP_1);
+                                } else if (action == ActionType.DRAW_3_CARDS_KEEP_1 && pioche.canDraw(3)) { //flagModif
+                                    actionsPossibles = actionsPossibles.append(ActionType.DRAW_3_CARDS_KEEP_1);
                                 } else {
                                     actionsPossibles = actionsPossibles.append(action);
                                }
                             }
-                            Action typeDAction = joueurCourant.player().controller.selectActionAmong(actionsPossibles.toList());
+                            ActionType typeDAction = joueurCourant.player().controller.selectActionAmong(actionsPossibles.toList());
                             // execute selected action
-                            if (typeDAction == Action.DRAW_2_CARDS_KEEP_1) {
+                            if (typeDAction == ActionType.DRAW_2_CARDS_KEEP_1) { // attention, sorte de doublons de code ////////
                                 Set<Card> cartesPiochees = pioche.draw(2);
                                 if (!joueurCourant.player().city().has(District.LIBRARY)) {
                                     Card keptCard = joueurCourant.player().controller.selectAmong(cartesPiochees);
@@ -135,96 +136,100 @@ public class Citadels {
                                     cartesPiochees = HashSet.of(keptCard);
                                 }
                                 joueurCourant.player().add(cartesPiochees);
-                            } else if (typeDAction == Action.RECEIVE_2_COINS) {
+                            } else if (typeDAction == ActionType.RECEIVE_2_COINS) {
                                 joueurCourant.player().add(2);
-                            } else if (typeDAction == Action.DRAW_3_CARDS_KEEP_1) {
-                                Set<Card> cardsDrawn = pioche.draw(3);
+                            } else if (typeDAction == ActionType.DRAW_3_CARDS_KEEP_1) {
+                                Set<Card> cartesPiochees = pioche.draw(3);
                                 if (!joueurCourant.player().city().has(District.LIBRARY)) {
-                                    Card keptCard = joueurCourant.player().controller.selectAmong(cardsDrawn);
-                                    pioche.discard(cardsDrawn.remove(keptCard).toList());
-                                    cardsDrawn = HashSet.of(keptCard);
+                                    Card keptCard = joueurCourant.player().controller.selectAmong(cartesPiochees);
+                                    pioche.discard(cartesPiochees.remove(keptCard).toList());
+                                    cartesPiochees = HashSet.of(keptCard);
                                 }
-                                joueurCourant.player().add(cardsDrawn);
+                                joueurCourant.player().add(cartesPiochees);
                             }
                             actionExecuted(joueurCourant, typeDAction, couplesJoueurPerso);
 
                             // receive powers from the character            flagModif
-                            List<Action> powers = (List<Action>) joueurCourant.character().getPowers();
+                            List<ActionType> powers = (List<ActionType>) joueurCourant.character().getPowers();
 
-                            List<Action> extraActions = List.empty();
+                            List<ActionType> actionsBonus = List.empty();
                             for (District d : joueurCourant.player().city().districts()) {
-                                if (d == District.SMITHY) {
-                                    extraActions = extraActions.append(Action.DRAW_3_CARDS_KEEP_1);
+
+                                actionsBonus = actionsBonus.append(d.getActionBonus());
+                                /*if (d == District.SMITHY) {
+                                    actionsBonus = actionsBonus.append(ActionType.DRAW_3_CARDS_KEEP_1);
                                 }
                                 if (d == District.LABORATORY) {
-                                    extraActions = extraActions.append(Action.DISCARD_CARD_FOR_2_COINS);
-                                }
+                                    actionsBonus = actionsBonus.append(ActionType.DISCARD_CARD_FOR_2_COINS);
+                                }*/
                             }
-                            Set<Action> availableActions11 = Group.OPTIONAL_ACTIONS
+                            Set<ActionType> actionsPossibles1 = Group.OPTIONAL_ACTIONS
                                     .addAll(powers)
-                                    .addAll(extraActions);
-                            Action actionType11;
+                                    .addAll(actionsBonus);
+                            ActionType actionType11;
                             do {
-                                Set<Action> availableActions1 = availableActions11;
+                                Set<ActionType> availableActionsCopie = actionsPossibles1;
                                 // keep only actions that player can realize
-                                List<Action> possibleActions2 = List.empty();
-                                for (Action action : availableActions1) {
-                                    if (action == Action.BUILD_DISTRICT) {
+                                List<ActionType> possibleActions2 = List.empty();
+                                for (ActionType action : availableActionsCopie) {
+                                    if (action == ActionType.BUILD_DISTRICT) {
                                         if (!joueurCourant.player().buildableDistrictsInHand().isEmpty())
-                                            possibleActions2 = possibleActions2.append(Action.BUILD_DISTRICT);
-                                    } else if (action == Action.DESTROY_DISTRICT && DestroyDistrictAction.districtsDestructibleBy(groupeCoupleJoueurPerso, joueurCourant.player()).exists(districtsByPlayer -> !districtsByPlayer._2().isEmpty())) {
+                                            possibleActions2 = possibleActions2.append(ActionType.BUILD_DISTRICT);
+                                    } else if (action == ActionType.DESTROY_DISTRICT && DestroyDistrictAction.districtsDestructibleBy(groupeCoupleJoueurPerso, joueurCourant.player()).exists(districtsByPlayer -> !districtsByPlayer._2().isEmpty())) {
 
-                                        possibleActions2 = possibleActions2.append(Action.DESTROY_DISTRICT);
-                                    } else if (action == Action.DISCARD_CARD_FOR_2_COINS && !joueurCourant.player().cards().isEmpty()) {
+                                        possibleActions2 = possibleActions2.append(ActionType.DESTROY_DISTRICT);
+                                    } else if (action == ActionType.DISCARD_CARD_FOR_2_COINS && !joueurCourant.player().cards().isEmpty()) {
 
-                                        possibleActions2 = possibleActions2.append(Action.DISCARD_CARD_FOR_2_COINS);
-                                    } else if (action == Action.DRAW_3_CARDS_KEEP_1 && pioche.canDraw(3) && joueurCourant.player().canAfford(2)) {
+                                        possibleActions2 = possibleActions2.append(ActionType.DISCARD_CARD_FOR_2_COINS);
+                                    } else if (action == ActionType.DRAW_3_CARDS_KEEP_1 && pioche.canDraw(3) && joueurCourant.player().canAfford(2)) {
 
-                                        possibleActions2 = possibleActions2.append(Action.DRAW_3_CARDS_FOR_2_COINS);
-                                    } else if (action == Action.EXCHANGE_CARDS_WITH_PILE && !joueurCourant.player().cards().isEmpty() && pioche.canDraw(1)) {
+                                        possibleActions2 = possibleActions2.append(ActionType.DRAW_3_CARDS_FOR_2_COINS);
+                                    } else if (action == ActionType.EXCHANGE_CARDS_WITH_PILE && !joueurCourant.player().cards().isEmpty() && pioche.canDraw(1)) {
 
-                                        possibleActions2 = possibleActions2.append(Action.EXCHANGE_CARDS_WITH_PILE);
-                                    } else if (action == Action.PICK_2_CARDS && pioche.canDraw(2)) {
-                                        possibleActions2 = possibleActions2.append(Action.PICK_2_CARDS);
+                                        possibleActions2 = possibleActions2.append(ActionType.EXCHANGE_CARDS_WITH_PILE);
+                                    } else if (action == ActionType.PICK_2_CARDS && pioche.canDraw(2)) {
+                                        possibleActions2 = possibleActions2.append(ActionType.PICK_2_CARDS);
                                     } else
                                         possibleActions2 = possibleActions2.append(action);
                                 }
-                                Action actionType1 = joueurCourant.player().controller.selectActionAmong(possibleActions2.toList());
+                                ActionType typeDAction1 = joueurCourant.player().controller.selectActionAmong(possibleActions2.toList());
                                 // execute selected action
-                                if (actionType1 == Action.BUILD_DISTRICT) {
+                                if (typeDAction1 == ActionType.BUILD_DISTRICT) {
                                     Card card = joueurCourant.player().controller.selectAmong(joueurCourant.player().buildableDistrictsInHand());
                                     joueurCourant.player().buildDistrict(card);
-                                } else if (actionType1 == Action.DISCARD_CARD_FOR_2_COINS) {
+                                } else if (typeDAction1 == ActionType.DISCARD_CARD_FOR_2_COINS) {
                                     Player player = joueurCourant.player();
                                     Card card = player.controller.selectAmong(player.cards());
                                     player.cards = player.cards().remove(card);
                                     pioche.discard(card);
                                     player.add(2);
-                                } else if (actionType1 == Action.DRAW_3_CARDS_FOR_2_COINS) {
+                                } else if (typeDAction1 == ActionType.DRAW_3_CARDS_FOR_2_COINS) {
                                     joueurCourant.player().add(pioche.draw(3));
                                     joueurCourant.player().pay(2);
-                                } else if (actionType1 == Action.EXCHANGE_CARDS_WITH_PILE) {
+                                } else if (typeDAction1 == ActionType.EXCHANGE_CARDS_WITH_PILE) {
                                     Set<Card> cardsToSwap = joueurCourant.player().controller.selectManyAmong(joueurCourant.player().cards());
                                     joueurCourant.player().cards = joueurCourant.player().cards().removeAll(cardsToSwap);
                                     joueurCourant.player().add(pioche.swapWith(cardsToSwap.toList()));
-                                } else if (actionType1 == Action.EXCHANGE_CARDS_WITH_OTHER_PLAYERS) {
+                                } else if (typeDAction1 == ActionType.EXCHANGE_CARDS_WITH_OTHER_PLAYERS) {
                                     Player playerToSwapWith = joueurCourant.player().controller.selectPlayerAmong(groupeCoupleJoueurPerso.associations.map(Group::player).remove(joueurCourant.player()));
                                     joueurCourant.player().exchangeHandWith(playerToSwapWith);
-                                } else if (actionType1 == Action.KILL) {
+                                } else if (typeDAction1 == ActionType.KILL) {
                                     Character characterToMurder = joueurCourant.player().controller.selectAmong(List.of(Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD));
                                     groupeCoupleJoueurPerso.associationToCharacter(characterToMurder).peek(Group::murder);
-                                } else if (actionType1 == Action.PICK_2_CARDS) {
+                                } else if (typeDAction1 == ActionType.PICK_2_CARDS) {
                                     joueurCourant.player().add(pioche.draw(2));
-                                } else if (actionType1 == Action.RECEIVE_2_COINS) {
+                                } else if (typeDAction1 == ActionType.RECEIVE_2_COINS) {
                                     joueurCourant.player().add(2);
-                                } else if (actionType1 == Action.RECEIVE_1_COIN) {
+                                } else if (typeDAction1 == ActionType.RECEIVE_1_COIN) {
                                     joueurCourant.player().add(1);
-                                } else if (actionType1 == Action.RECEIVE_INCOME) {
+                                } else if (typeDAction1 == ActionType.RECEIVE_INCOME) {
                                     DistrictType type = null;
 
 
                                     //type = group.character.associatedDistrictType();
+                                    type = joueurCourant.character.associatedDistrictType().get();
 
+                                    /*
                                     if (joueurCourant.character == Character.BISHOP) {
                                         type = DistrictType.RELIGIOUS;
                                     } else if (joueurCourant.character == Character.WARLORD) {
@@ -233,29 +238,29 @@ public class Citadels {
                                         type = DistrictType.NOBLE;
                                     } else if (joueurCourant.character == Character.MERCHANT) {
                                         type = DistrictType.TRADE;
-                                    }
+                                    }*/
                                     if (type != null) {
-                                        for (District d : joueurCourant.player().city().districts()) {
-                                            if (d.districtType() == type) {
+                                        for (District district : joueurCourant.player().city().districts()) {
+                                            if (district.districtType() == type) {
                                                 joueurCourant.player().add(1);
                                             }
-                                            if (d == District.MAGIC_SCHOOL) {
+                                            if (district == District.MAGIC_SCHOOL) {
                                                 joueurCourant.player().add(1);
                                             }
                                         }
                                     }
-                                } else if (actionType1 == Action.DESTROY_DISTRICT) {
+                                } else if (typeDAction1 == ActionType.DESTROY_DISTRICT) {
                                     //flemme
-                                } else if (actionType1 == Action.ROB) {
-                                    Character character = joueurCourant.player().controller.selectAmong(List.of(Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD)
+                                } else if (typeDAction1 == ActionType.ROB) {
+                                    Character personnage = joueurCourant.player().controller.selectAmong(List.of(Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD)
                                             .removeAll(groupeCoupleJoueurPerso.associations.find(Group::isMurdered).map(Group::character)));
-                                    groupeCoupleJoueurPerso.associationToCharacter(character).peek(association -> association.stolenBy(joueurCourant.player()));
+                                    groupeCoupleJoueurPerso.associationToCharacter(personnage).peek(association -> association.stolenBy(joueurCourant.player()));
                                 }
-                                actionExecuted(joueurCourant, actionType1, couplesJoueurPerso);
-                                actionType11 = actionType1;
-                                availableActions11 = availableActions11.remove(actionType11);
+                                actionExecuted(joueurCourant, typeDAction1, couplesJoueurPerso);
+                                actionType11 = typeDAction1;
+                                actionsPossibles1 = actionsPossibles1.remove(actionType11);
                             }
-                            while (!availableActions11.isEmpty() && actionType11 != Action.END_ROUND);
+                            while (!actionsPossibles1.isEmpty() && actionType11 != ActionType.END_ROUND);
                         }
                     }
                 }
@@ -272,7 +277,7 @@ public class Citadels {
                 .map(Group::player));
     }
 
-    public static void actionExecuted(Group association, Action actionType, List<Group> associations) {
+    public static void actionExecuted(Group association, ActionType actionType, List<Group> associations) {
         System.out.println("Player " + association.player().name() + " executed action " + actionType.getDescription());
         associations.map(Group::player)
                 .forEach(Citadels::displayStatus);

@@ -1,6 +1,6 @@
-package com.montaury.citadels;
+package com.montaury.citadels.actions;
 
-public enum Action {
+public enum ActionType {
     RECEIVE_2_COINS("Receive 2 coins"),
     RECEIVE_1_COIN("Receive 1 gold"),
     RECEIVE_INCOME("Receive income"),
@@ -17,12 +17,12 @@ public enum Action {
     END_ROUND ("End round"),
     DRAW_3_CARDS_KEEP_1("Draw 3 cards and keep 1");
 
-    String getDescription()
+    public String getDescription()
     {
         return this.descriptionAction;
     }
 
-    Action(String descriptionAction)
+    ActionType(String descriptionAction)
     {
         this.descriptionAction = descriptionAction;
     }

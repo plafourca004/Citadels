@@ -1,5 +1,6 @@
 package com.montaury.citadels.player;
 
+import com.montaury.citadels.actions.ActionType;
 import com.montaury.citadels.character.Character;
 import com.montaury.citadels.district.Card;
 import com.montaury.citadels.district.DestructibleDistrict;
@@ -7,7 +8,6 @@ import io.vavr.Tuple2;
 import io.vavr.collection.*;
 
 import java.util.Scanner;
-import java.util.function.Function;
 
 public class HumanController implements PlayerController {
 
@@ -18,12 +18,12 @@ public class HumanController implements PlayerController {
     }
 
     @Override
-    public String selectActionAmong(List<String> actions) {
+    public ActionType selectActionAmong(List<ActionType> actions) {
         displayActionsForSelection(actions);
         return actions.get(scanner.nextInt() - 1);
     }
 
-    private void displayActionsForSelection(List<String> actions) {
+    private void displayActionsForSelection(List<ActionType> actions) {
         for (int i = 0; i < actions.size(); i++) {
             System.out.println(actions.get(i) + "(" + (i + 1) + "), ");
         }
