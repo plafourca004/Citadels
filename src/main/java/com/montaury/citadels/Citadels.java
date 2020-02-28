@@ -128,13 +128,13 @@ public class Citadels {
                             Action typeDAction = joueurCourant.player().controller.selectActionAmong(actionsPossibles.toList());
                             // execute selected action
                             if (typeDAction == Action.DRAW_2_CARDS_KEEP_1) {
-                                Set<Card> cardsDrawn = pioche.draw(2);
+                                Set<Card> cartesPiochees = pioche.draw(2);
                                 if (!joueurCourant.player().city().has(District.LIBRARY)) {
-                                    Card keptCard = joueurCourant.player().controller.selectAmong(cardsDrawn);
-                                    pioche.discard(cardsDrawn.remove(keptCard).toList());
-                                    cardsDrawn = HashSet.of(keptCard);
+                                    Card keptCard = joueurCourant.player().controller.selectAmong(cartesPiochees);
+                                    pioche.discard(cartesPiochees.remove(keptCard).toList());
+                                    cartesPiochees = HashSet.of(keptCard);
                                 }
-                                joueurCourant.player().add(cardsDrawn);
+                                joueurCourant.player().add(cartesPiochees);
                             } else if (typeDAction == Action.RECEIVE_2_COINS) {
                                 joueurCourant.player().add(2);
                             } else if (typeDAction == Action.DRAW_3_CARDS_KEEP_1) {
