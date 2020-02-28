@@ -11,7 +11,7 @@ import io.vavr.collection.Set;
 public interface PlayerController {
     Character selectOwnCharacter(List<Character> availableCharacters, List<Character> faceUpRevealedCharacters);
 
-    String selectActionAmong(List<Action> actions);
+    Action selectActionAmong(List<Action> actions);
 
     Card selectAmong(Set<Card> cards);
 
