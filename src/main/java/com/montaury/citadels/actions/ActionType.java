@@ -3,7 +3,9 @@ package com.montaury.citadels.actions;
 import com.montaury.citadels.CardPile;
 import com.montaury.citadels.round.GameRoundAssociations;
 import com.montaury.citadels.round.Group;
+import com.montaury.citadels.round.action.DestroyDistrict;
 import io.vavr.collection.List;
+import io.vavr.collection.Set;
 
 public enum ActionType {
     RECEIVE_2_COINS("Receive 2 coins",new ReceiveTwoCoinsAction()),
@@ -40,7 +42,7 @@ public enum ActionType {
 
     public void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
-        /// Mettre la boucle for et tout ici et appeller uneAction.canExecute
+            uneAction.canExecute(joueurCourant, possibleActions, groupeCoupleJoueurPerso, pioche);
     }
 
 

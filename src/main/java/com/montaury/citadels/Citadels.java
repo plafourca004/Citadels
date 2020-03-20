@@ -182,23 +182,7 @@ public class Citadels {
                             // keep only actions that player can realize
                             List<ActionType> possibleActions2 = List.empty();
                             for (ActionType action : availableActionsCopie) {
-                                if (action == ActionType.BUILD_DISTRICT) {
-                                    if (!joueurCourant.player().buildableDistrictsInHand().isEmpty())
-                                        possibleActions2 = possibleActions2.append(ActionType.BUILD_DISTRICT);
-                                } else if (action == ActionType.DESTROY_DISTRICT && DestroyDistrict.districtsDestructibleBy(groupeCoupleJoueurPerso, joueurCourant.player()).exists(districtsByPlayer -> !districtsByPlayer._2().isEmpty())) {
-
-                                    possibleActions2 = possibleActions2.append(ActionType.DESTROY_DISTRICT);
-                                } else if (action == ActionType.DISCARD_CARD_FOR_2_COINS && !joueurCourant.player().cards().isEmpty()) {
-
-                                    possibleActions2 = possibleActions2.append(ActionType.DISCARD_CARD_FOR_2_COINS);
-                                } else if (action == ActionType.DRAW_3_CARDS_KEEP_1 && pioche.canDraw(3) && joueurCourant.player().canAfford(2)) {
-                                    possibleActions2 = possibleActions2.append(ActionType.DRAW_3_CARDS_FOR_2_COINS);
-                                } else if (action == ActionType.EXCHANGE_CARDS_WITH_PILE && !joueurCourant.player().cards().isEmpty() && pioche.canDraw(1)) {
-                                    possibleActions2 = possibleActions2.append(ActionType.EXCHANGE_CARDS_WITH_PILE);
-                                } else if (action == ActionType.PICK_2_CARDS && pioche.canDraw(2)) {
-                                    possibleActions2 = possibleActions2.append(ActionType.PICK_2_CARDS);
-                                } else
-                                    possibleActions2 = possibleActions2.append(action);
+                                action.canExecute( joueurCourant,  possibleActions2, groupeCoupleJoueurPerso,  pioche);
                             }
                             ActionType typeDAction1 = joueurCourant.player().controller.selectActionAmong(possibleActions2.toList());
                             typeDAction1.execute( joueurCourant,  couplesJoueurPerso, groupeCoupleJoueurPerso, pioche);

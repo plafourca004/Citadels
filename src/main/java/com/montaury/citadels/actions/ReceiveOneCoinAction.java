@@ -10,4 +10,8 @@ public class ReceiveOneCoinAction extends Action {
     void execute(Group joueur, List<Group> listeCouplesJoueursPersos, GameRoundAssociations groupe, CardPile pioche) {
         joueur.player().add(1);
     }
+    void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
+    {
+        possibleActions = possibleActions.append(ActionType.RECEIVE_1_COIN);
+    }
 }

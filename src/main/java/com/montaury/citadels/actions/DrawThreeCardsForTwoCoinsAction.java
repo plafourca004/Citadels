@@ -14,5 +14,9 @@ public class DrawThreeCardsForTwoCoinsAction extends Action {
         joueur.player().add(pioche.draw(3));
         joueur.player().pay(2);
     }
+    void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
+    {
+        possibleActions = possibleActions.append(ActionType.DRAW_3_CARDS_FOR_2_COINS);
+    }
 
 }

@@ -13,4 +13,8 @@ public class KillAction extends Action {
         Character characterToMurder = joueur.player().controller.selectAmong(List.of(Character.THIEF, Character.MAGICIAN, Character.KING, Character.BISHOP, Character.MERCHANT, Character.ARCHITECT, Character.WARLORD));
         groupe.associationToCharacter(characterToMurder).peek(Group::murder);
     }
+    void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
+    {
+        possibleActions = possibleActions.append(ActionType.KILL);
+    }
 }

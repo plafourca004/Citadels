@@ -13,4 +13,8 @@ public class RobAction extends Action {
                 .removeAll(groupe.associations.find(Group::isMurdered).map(Group::character)));
         groupe.associationToCharacter(personnage).peek(association -> association.stolenBy(joueur.player()));
     }
+    void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
+    {
+        possibleActions = possibleActions.append(ActionType.ROB);
+    }
 }

@@ -14,4 +14,9 @@ public class ExchangeCardsWithOtherPlayersAction extends Action {
         joueur.player().exchangeHandWith(playerToSwapWith);
     }
 
+    void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
+    {
+        possibleActions = possibleActions.append(ActionType.EXCHANGE_CARDS_WITH_OTHER_PLAYERS);
+    }
+
 }
