@@ -8,15 +8,15 @@ import io.vavr.collection.List;
 
 public class DrawThreeCardsKeepOneAction extends Action {
 
-    void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
-    {
-        if (pioche.canDraw(3) && joueurCourant.player().canAfford(2))
-            possibleActions = possibleActions.append(ActionType.DRAW_3_CARDS_FOR_2_COINS);
-    }
 
     void execute(Group joueur, List<Group> listeCouplesJoueursPersos, GameRoundAssociations groupe, CardPile pioche)
     {
 
     }
-
+    void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
+    {
+        if (pioche.canDraw(3) && joueurCourant.player().canAfford(2))
+            possibleActions = possibleActions.append(ActionType.DRAW_3_CARDS_FOR_2_COINS);
+        System.out.println("je suis dans .DRAW_3_CARDS_FOR_2_COINS ");
+    }
 }

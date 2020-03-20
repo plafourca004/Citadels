@@ -99,7 +99,7 @@ public class Citadels {
             //List<Group> associations = associations;
             GameRoundAssociations groupeCoupleJoueurPerso = new GameRoundAssociations(couplesJoueurPerso);
 
-            jouerUnTour ( couplesJoueurPerso,  pioche, groupeCoupleJoueurPerso );
+            jouerUnTour( couplesJoueurPerso,  pioche, groupeCoupleJoueurPerso );
 
             roundAssociations = couplesJoueurPerso;
             joueurCouronne = roundAssociations.find(a -> a.character == Character.KING).map(Group::player).getOrElse(joueurCouronne);
@@ -181,15 +181,19 @@ public class Citadels {
                             Set<ActionType> availableActionsCopie = actionsPossibles1;
                             // keep only actions that player can realize
                             List<ActionType> possibleActions2 = List.empty();
-                            for (ActionType action : availableActionsCopie) {
+                            for (ActionType action : availableActionsCopie){
+                                System.out.println(action.getDescription());
                                 action.canExecute( joueurCourant,  possibleActions2, groupeCoupleJoueurPerso,  pioche);
+                                //System.out.println("BALISE - 1 dépassée");
                             }
+                            //System.out.println("BALISE 0 dépassée");
                             ActionType typeDAction1 = joueurCourant.player().controller.selectActionAmong(possibleActions2.toList());
                             typeDAction1.execute( joueurCourant,  couplesJoueurPerso, groupeCoupleJoueurPerso, pioche);
-
+                            //System.out.println("BALISE 1 dépassée");
                             actionExecuted(joueurCourant, typeDAction1, couplesJoueurPerso);
                             actionType11 = typeDAction1;
                             actionsPossibles1 = actionsPossibles1.remove(actionType11);
+                            //System.out.println("BALISE 2 dépassée");
                         }
                         while (!actionsPossibles1.isEmpty() && actionType11 != ActionType.END_ROUND);
                     }

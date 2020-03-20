@@ -12,6 +12,7 @@ import io.vavr.collection.List;
 import io.vavr.collection.Map;
 
 
+
 public class DestroyDistrictAction extends Action {
     @Override
     void execute(Group joueur, List<Group> listeCouplesJoueursPersos, GameRoundAssociations groupe, CardPile pioche)
@@ -22,15 +23,29 @@ public class DestroyDistrictAction extends Action {
                 districtDestructibleParPlayer.put(playerCourant.player(), playerCourant.player().city().districtsDestructibleBy(joueur.player()));
             }
         }
-        joueur.player().controller.selectDistrictToDestroyAmong(districtDestructibleParPlayer);
+        //joueur.player().controller.selectDistrictToDestroyAmong(districtDestructibleParPlayer).card();
+
+        Card card =  joueur.player().controller.selectDistrictToDestroyAmong(districtDestructibleParPlayer).card();
+
+
+
+
+        joueur.player().city().destroyDistrict( joueur.player().controller.selectDistrictToDestroyAmong(districtDestructibleParPlayer).card());
+
+
+
+        joueur.player().pay(  );
+
 
     }
 
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
         if (DestroyDistrict.districtsDestructibleBy(groupeCoupleJoueurPerso, joueurCourant.player()).exists(districtsByPlayer -> !districtsByPlayer._2().isEmpty()))
-            possibleActions = possibleActions.append(ActionType.DESTROY_DISTRICT);
+             possibleActions.append(ActionType.DESTROY_DISTRICT);
+        System.out.println("je suis dans DESTROY_DISTRICT");
     }
+
 
 
 

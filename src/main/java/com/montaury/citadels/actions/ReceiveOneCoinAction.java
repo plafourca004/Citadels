@@ -12,6 +12,7 @@ public class ReceiveOneCoinAction extends Action {
     }
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
-        possibleActions = possibleActions.append(ActionType.RECEIVE_1_COIN);
+        possibleActions.append(ActionType.RECEIVE_1_COIN);
+        System.out.println("je suis dans RECEIVE_1_COIN");
     }
 }

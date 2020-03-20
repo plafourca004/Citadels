@@ -20,7 +20,7 @@ public class HumanController implements PlayerController {
     @Override
     public ActionType selectActionAmong(List<ActionType> actions) {
         displayActionsForSelection(actions);
-        return actions.get(scanner.nextInt() - 1);
+        return actions.get(scanner.nextInt()-1);
     }
 
     private void displayActionsForSelection(List<ActionType> actions) {
@@ -84,6 +84,7 @@ public class HumanController implements PlayerController {
             }
         }
         return orderedDestructibleDistricts.get(scanner.nextInt());
+
     }
 
     @Override

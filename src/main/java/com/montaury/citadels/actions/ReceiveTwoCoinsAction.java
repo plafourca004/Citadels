@@ -13,6 +13,7 @@ public class ReceiveTwoCoinsAction extends Action {
     }
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
-        possibleActions = possibleActions.append(ActionType.RECEIVE_2_COINS);
+        possibleActions.append(ActionType.RECEIVE_2_COINS);
+        System.out.println("je suis dans RECEIVE_2_COINS ");
     }
 }

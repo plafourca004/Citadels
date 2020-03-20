@@ -29,6 +29,7 @@ public class ReceiveIncomeAction extends Action {
     }
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
-        possibleActions = possibleActions.append(ActionType.RECEIVE_INCOME);
+        possibleActions.append(ActionType.RECEIVE_INCOME);
+        System.out.println("je suis dans RECEIVE_INCOME ");
     }
 }

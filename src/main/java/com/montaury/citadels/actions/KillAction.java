@@ -15,6 +15,8 @@ public class KillAction extends Action {
     }
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
-        possibleActions = possibleActions.append(ActionType.KILL);
+        possibleActions.append(ActionType.KILL);
+        System.out.println("je suis dans KILL");
+
     }
 }

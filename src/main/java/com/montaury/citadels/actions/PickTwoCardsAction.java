@@ -16,7 +16,8 @@ public class PickTwoCardsAction extends Action {
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
         if (pioche.canDraw(2))
-            possibleActions = possibleActions.append(ActionType.PICK_2_CARDS);
+           possibleActions.append(ActionType.PICK_2_CARDS);
+        System.out.println("je suis dans PICK_2_CARDS");
     }
 
 }

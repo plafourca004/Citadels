@@ -16,11 +16,11 @@ public class BuildDistrictAction extends Action {
 
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
-        if (!joueurCourant.player().buildableDistrictsInHand().isEmpty())
-            possibleActions = possibleActions.append(ActionType.BUILD_DISTRICT);
+        if (!joueurCourant.player().buildableDistrictsInHand().isEmpty() )
+        {
+            possibleActions.append(ActionType.BUILD_DISTRICT);
+            System.out.println("je suis dans BUILD_DISTRICT");
+        }
     }
-
-
-
 }
 

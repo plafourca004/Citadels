@@ -17,6 +17,7 @@ public class ExchangeCardsWithOtherPlayersAction extends Action {
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
         possibleActions = possibleActions.append(ActionType.EXCHANGE_CARDS_WITH_OTHER_PLAYERS);
+        System.out.println("je suis dans EXCHANGE_CARDS_WITH_OTHER_PLAYERS ");
     }
 
 }

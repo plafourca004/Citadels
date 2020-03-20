@@ -18,10 +18,10 @@ public enum ActionType {
     PICK_2_CARDS("Pick 2 cards", new PickTwoCardsAction()),
     BUILD_DISTRICT("Build district", new BuildDistrictAction()),
     DESTROY_DISTRICT("Destroy district", new DestroyDistrictAction()),
-    DRAW_2_CARDS_KEEP_1("Draw 2 cards and keep 1",null),
+    DRAW_2_CARDS_KEEP_1("Draw 2 cards and keep 1", new DrawTwoCardsKeepOneAction()),
     DISCARD_CARD_FOR_2_COINS("Discard card for 2 coins", new DiscardCardForTwoCoinsAction()),
     DRAW_3_CARDS_FOR_2_COINS("Draw 3 cards for 2 coins", new DrawThreeCardsForTwoCoinsAction()),
-    END_ROUND ("End round", null),
+    END_ROUND ("End round", new EndRoundAction()),
     DRAW_3_CARDS_KEEP_1("Draw 3 cards and keep 1", new DrawThreeCardsKeepOneAction());
 
     public String getDescription()

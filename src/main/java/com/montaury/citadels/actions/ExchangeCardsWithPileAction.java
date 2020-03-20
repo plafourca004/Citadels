@@ -19,6 +19,7 @@ public class ExchangeCardsWithPileAction extends Action {
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
         if (!joueurCourant.player().cards().isEmpty() && pioche.canDraw(1))
-            possibleActions = possibleActions.append(ActionType.EXCHANGE_CARDS_WITH_PILE);
+            possibleActions.append(ActionType.EXCHANGE_CARDS_WITH_PILE);
+        System.out.println("je suis dans EXCHANGE_CARDS_WITH_PILE ");
     }
 }

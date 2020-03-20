@@ -22,7 +22,8 @@ public class DiscardCardForTwoCoinsAction extends Action {
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
         if (!joueurCourant.player().cards().isEmpty())
-            possibleActions = possibleActions.append(ActionType.DISCARD_CARD_FOR_2_COINS);
+            possibleActions.append(ActionType.DISCARD_CARD_FOR_2_COINS);
+        System.out.println("je suis dans DISCARD_CARD_FOR_2_COINS");
     }
 
 }

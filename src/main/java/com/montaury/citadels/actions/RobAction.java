@@ -15,6 +15,7 @@ public class RobAction extends Action {
     }
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
     {
-        possibleActions = possibleActions.append(ActionType.ROB);
+        possibleActions.append(ActionType.ROB);
+        System.out.println("je suis dans ROB");
     }
 }
