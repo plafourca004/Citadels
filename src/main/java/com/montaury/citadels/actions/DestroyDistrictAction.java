@@ -26,17 +26,8 @@ public class DestroyDistrictAction extends Action {
         //joueur.player().controller.selectDistrictToDestroyAmong(districtDestructibleParPlayer).card();
 
         Card card =  joueur.player().controller.selectDistrictToDestroyAmong(districtDestructibleParPlayer).card();
-
-
-
-
         joueur.player().city().destroyDistrict( joueur.player().controller.selectDistrictToDestroyAmong(districtDestructibleParPlayer).card());
-
-
-
         joueur.player().pay(  );
-
-
     }
 
     void canExecute(Group joueurCourant, List<ActionType> possibleActions, GameRoundAssociations groupeCoupleJoueurPerso, CardPile pioche)
@@ -45,10 +36,4 @@ public class DestroyDistrictAction extends Action {
              possibleActions.append(ActionType.DESTROY_DISTRICT);
         System.out.println("je suis dans DESTROY_DISTRICT");
     }
-
-
-
-
-
-
 }
